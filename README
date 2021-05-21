@@ -1,0 +1,71 @@
+Code to perform Conductivity Tensor Imaging (CTI) of the human brain as described in:
+
+Conductivity Tensor Imaging of the human brain using water mapping techniques. Marino M, Cordero-Grande L, Mantini D, Ferrazzi G.
+Frontiers of Neuroscince (2021), In Press
+
+The package contains various (open source) toolboxes and Matlab functions
+
+The pipeline requires to have FSL (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki), MRtrix3 (https://www.mrtrix.org/) and IRTK (https://www.doc.ic.ac.uk/~dr/software/download.html) installed
+
+Clone the repo onto your Linux distribution and run (in order) the following:
+
+1. run: processing/Michel_et_al/main.m with Matlab
+
+This step calculates isotropic conductivity maps starting from a set of spin echo images. The process is described in detailed here: 
+
+	    Michel, E., Hernandez, D., and Lee, S.Y. (2017). Electrical conductivity and permittivity maps of brain tissues 		    derived from water content based on T1 weighted acquisition. Magnetic resonance in medicine 77(3), 1094-1103.
+
+2. from a terminal run: source processing/DTI_Preprocessing/Process.sh
+
+These steps preprocess the DTI multi b-value data with denoising, bias field correction and distortion correction. Details of each step can be found here:
+
+	Denoising
+
+	   Veraart, J., Fieremans, E., and Novikov, D.S. (2016a). Diffusion MRI noise mapping using random
+	   matrix theory. Magnetic resonance in medicine 76(5), 1582-1593
+	   Veraart, J., Novikov, D.S., Christiaens, D., Ades-Aron, B., Sijbers, J., and Fieremans, E. (2016b).
+	   Denoising of diffusion MRI using random matrix theory. Neuroimage 142, 394-406
+
+	Bias field correction
+
+	   Tournier, J.D., Smith, R., Raffelt, D., Tabbara, R., Dhollander, T., Pietsch, M., et al. (2019).
+	   MRtrix3: A fast, flexible and open software framework for medical image processing and
+	   visualisation. NeuroImage 202, 116137
+
+	Distortion correction
+
+	   Andersson, J.L.R., Skare, S., and Ashburner, J. (2003). How to correct susceptibility distortions in
+	   spin-echo echo-planar images: application to diffusion tensor imaging. Neuroimage 20(2),
+	   870-888
+
+3. from a terminal run: source processing/DTI_toT1/Process.sh
+
+Register DTI pre-process data and resample it onto the space defined by the conductivity at high frequency defined in 		step 1. It employs the algorithm described here:
+   
+            Studholme, C., Hill, D.L.G., and Hawkes, D.J. (1999). An overlap invariant entropy measure of 3D
+            medical image alignment. Pattern recognition 32(1), 71-86.
+
+4. from a terminal run: source processing/MPRAGE_toT1/Process.sh
+
+Register MPRAGE data and resample it onto the space defined by the conductivity at high frequency defined in step 1. It employs the algorithm described here:
+   
+            Studholme, C., Hill, D.L.G., and Hawkes, D.J. (1999). An overlap invariant entropy measure of 3D
+            medical image alignment. Pattern recognition 32(1), 71-86.
+
+5. run: processing/CTI/cti.m with Matlab
+
+Performs CTI mapping as described in the proposed paper
+
+6. from a terminal run: processing/segmentation/Process.sh 
+
+Segment MP-RAGE scan into WM, GM and CSF masks according to
+  
+             Zhang, Y., Brady, M., and Smith, S. (2001). Segmentation of brain MR images through a hidden Markov random field  		     model and the expectation-maximization algorithm. IEEE transactions on medical imaging 20(1), 45-57.
+
+7. run: processing/segmentation/CTI_seg_hist.m and processing/segmentation/PSD.m with Matlab
+
+Produce parts of Figure 7 and Figure 5 of the paper
+
+Please do not hesitate to contact us for suggestions and remarks (giulio.ferrazzi@ospedalesancamillo.net or marco.marino@kuleuven.be)
+
+DISCLAIMER OF WARRANTIES AND LIMITATION OF LIABILITY The code is supplied as is and all use is at your own risk. The authors disclaim all warranties of any kind, either express or implied, as to the softwares, including, but not limited to, implied warranties of fitness for a particular purpose, merchantability or non - infringement of proprietary rights. Neither this agreement nor any documentation furnished under it is intended to express or imply any warranty that the operation of the software will be error - free. Under no circumstances shall the authors of the softwares provided here be liable to any user for direct, indirect, incidental, consequential, special, or exemplary damages, arising from the software, or user' s use or misuse of the softwares. Such limitation of liability shall apply whether the damages arise from the use or misuse of the data provided or errors of the software
